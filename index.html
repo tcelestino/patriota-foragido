@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#060a1e" />
+    <meta name="description" content="Patriota Foragido: uma sátira em pixel art em que um fugitivo coleta passagens e escapa dos agentes." />
+    <title>Patriota Foragido: Fugindo em Busca de Atenção</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="masthead">
+        <p class="kicker">UM ARCADE DE SÁTIRA</p>
+        <h1 class="title"><span>PATRIOTA</span> <span>FORAGIDO</span></h1>
+        <p class="subtitle">FUGINDO EM BUSCA DE ATENÇÃO</p>
+      </header>
+
+      <section class="hud" aria-label="Placar">
+        <div class="card">
+          <span class="card-label">PONTOS</span>
+          <span id="hud-score" class="card-value">00000</span>
+        </div>
+        <div class="card">
+          <span class="card-label">VIDAS</span>
+          <span id="hud-hearts" class="card-value hearts" role="img"></span>
+        </div>
+        <div class="card">
+          <span class="card-label">PASSAGENS</span>
+          <span id="hud-passagens" class="card-value">274</span>
+        </div>
+        <div class="card">
+          <span class="card-label">RECORDE</span>
+          <span id="hud-record" class="card-value">0</span>
+        </div>
+      </section>
+
+      <main id="frame">
+        <div class="bezel">
+          <canvas id="game" aria-label="Labirinto do jogo"></canvas>
+          <div id="banner" class="banner" role="status" hidden></div>
+
+          <section id="screen-start" class="screen" aria-labelledby="start-title">
+            <h2 id="start-title" class="screen-title">ÚLTIMA CHAMADA!</h2>
+            <p class="screen-text">Colete as passagens espalhadas pelo labirinto e escape dos agentes. Pegue as laranjas para deixá-los temporariamente atordoados.</p>
+            <ul class="roster" aria-label="Personagens">
+              <li><canvas class="roster-icon" data-sprite="fugitivo" aria-hidden="true"></canvas></li>
+              <li><canvas class="roster-icon" data-sprite="delegado" aria-hidden="true"></canvas></li>
+              <li><canvas class="roster-icon" data-sprite="agente" aria-hidden="true"></canvas></li>
+              <li><canvas class="roster-icon" data-sprite="perito" aria-hidden="true"></canvas></li>
+              <li><canvas class="roster-icon" data-sprite="estagiario" aria-hidden="true"></canvas></li>
+              <li><canvas class="roster-icon" data-sprite="laranjas" aria-hidden="true"></canvas></li>
+            </ul>
+            <p class="screen-hint">SETAS OU WASD PARA ANDAR · P PARA PAUSAR<br />NO CELULAR, DESLIZE O DEDO NA TELA</p>
+            <button id="btn-start" class="btn-primary" type="button">COMEÇAR</button>
+          </section>
+
+          <section id="screen-end" class="screen" aria-labelledby="end-title" hidden>
+            <h2 id="end-title" class="screen-title">VOO CANCELADO!</h2>
+            <canvas id="plane" class="plane" role="img" aria-label="Avião parado na pista com um X vermelho"></canvas>
+            <p id="end-message" class="screen-text"></p>
+            <p class="screen-hint">SETAS OU WASD PARA ANDAR · P PARA PAUSAR<br />NO CELULAR, DESLIZE O DEDO NA TELA</p>
+            <button id="btn-retry" class="btn-primary" type="button">TENTAR DE NOVO</button>
+          </section>
+        </div>
+      </main>
+
+      <nav class="controls" aria-label="Controles">
+        <button id="btn-pause" class="btn" type="button" disabled>PAUSAR</button>
+        <!-- Escondido por enquanto: ainda não há áudio real. Para reativar, remova o atributo hidden. -->
+        <button id="btn-sound" class="btn" type="button" hidden>SOM: LIGADO</button>
+        <button id="btn-restart" class="btn" type="button">REINICIAR</button>
+      </nav>
+
+      <aside class="side" aria-label="Personagens e dicas">
+        <p id="level-label" class="level">FASE 1</p>
+
+        <h2 class="side-title">PERSONAGENS</h2>
+        <ul class="legend">
+          <li>
+            <canvas class="legend-icon" data-sprite="fugitivo" aria-hidden="true"></canvas>
+            <span><strong>FUGITIVO</strong>Você. Colete as passagens do labirinto.</span>
+          </li>
+          <li>
+            <canvas class="legend-icon" data-sprite="delegado" aria-hidden="true"></canvas>
+            <span><strong>DELEGADO</strong>Vai direto atrás de você.</span>
+          </li>
+          <li>
+            <canvas class="legend-icon" data-sprite="agente" aria-hidden="true"></canvas>
+            <span><strong>AGENTE</strong>Tenta cortar o seu caminho.</span>
+          </li>
+          <li>
+            <canvas class="legend-icon" data-sprite="perito" aria-hidden="true"></canvas>
+            <span><strong>PERITO</strong>Imprevisível: age junto com o Delegado.</span>
+          </li>
+          <li>
+            <canvas class="legend-icon" data-sprite="estagiario" aria-hidden="true"></canvas>
+            <span><strong>ESTAGIÁRIO</strong>Avança, mas recua quando você chega perto.</span>
+          </li>
+          <li>
+            <canvas class="legend-icon" data-sprite="laranjas" aria-hidden="true"></canvas>
+            <span><strong>LARANJAS</strong>Deixa os agentes atordoados por alguns segundos.</span>
+          </li>
+        </ul>
+
+        <h2 class="side-title">DICAS DE FUGA</h2>
+        <p id="tip-text" class="fact"></p>
+      </aside>
+
+      <footer class="footer">
+        <p class="footer-strong">FEITO PARA JOGAR, NÃO PARA LEVAR A SÉRIO.</p>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

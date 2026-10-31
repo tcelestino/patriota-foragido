@@ -1,0 +1,638 @@
+:root {
+  --bg: #060a1e;
+  --ink: #e8ecff;
+  --ink-dim: #9aa6d6;
+  --yellow: #ffdf00;
+  --yellow-deep: #f0b400;
+  --green: #12b457;
+  --green-neon: #3ddc84;
+  --blue: #1f4fd8;
+  --blue-neon: #5a8dff;
+  --glass: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --veil: rgba(4, 7, 22, 0.78);
+  --pixel: 'Press Start 2P', ui-monospace, monospace;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* 1% da altura da janela; vira dvh onde houver suporte (barra do navegador no celular). */
+  --vh: 1vh;
+  color-scheme: dark;
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --vh: 1dvh;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+body {
+  background:
+    radial-gradient(60% 50% at 12% 6%, rgba(18, 180, 87, 0.24), transparent 62%),
+    radial-gradient(55% 45% at 92% 12%, rgba(255, 223, 0, 0.14), transparent 62%),
+    radial-gradient(75% 60% at 50% 105%, rgba(31, 79, 216, 0.34), transparent 68%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* `display: flex` das telas não pode vencer o atributo hidden. */
+[hidden] {
+  display: none !important;
+}
+
+p,
+h1,
+h2,
+ul {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+/* Superfície de vidro usada por cards, painel lateral e botões. */
+.card,
+.side,
+.btn {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, calc(var(--vh) * 1.4), 14px);
+  width: 100%;
+  max-width: 760px;
+  height: 100vh;
+  height: calc(var(--vh) * 100);
+  margin: 0 auto;
+  padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+}
+
+/* Cabeçalho */
+
+.masthead {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(4px, calc(var(--vh) * 1), 10px);
+  text-align: center;
+}
+
+.kicker {
+  font-size: clamp(8px, calc(var(--vh) * 1.3), 11px);
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--ink-dim);
+}
+
+.title {
+  font-family: var(--pixel);
+  font-weight: 400;
+  /* Duas linhas de 8 caracteres da fonte pixel (1em cada) + espaçamento. */
+  font-size: clamp(18px, min(8.2vw, calc(var(--vh) * 3.8)), 46px);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--yellow);
+  background: linear-gradient(180deg, #fff27a 0%, var(--yellow) 42%, var(--green-neon) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px rgba(255, 223, 0, 0.3)) drop-shadow(0 3px 0 rgba(0, 0, 0, 0.35));
+}
+
+.title span {
+  display: block;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  font-size: clamp(10px, calc(var(--vh) * 1.6), 14px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+
+/* Cards do placar */
+
+.hud {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(4px, 1.4vw, 10px);
+  width: 100%;
+  max-width: 640px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, calc(var(--vh) * 0.9), 9px);
+  min-width: 0;
+  padding: clamp(5px, calc(var(--vh) * 1.1), 12px) 4px;
+  border-radius: 14px;
+}
+
+.card-label {
+  font-size: clamp(7px, min(2.2vw, calc(var(--vh) * 1.3)), 11px);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+}
+
+.card-value {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 1.1em;
+  font-family: var(--pixel);
+  font-size: clamp(9px, min(3.2vw, calc(var(--vh) * 2.2)), 18px);
+  line-height: 1;
+  color: var(--yellow);
+  text-shadow: 0 0 12px rgba(255, 223, 0, 0.35);
+}
+
+/* Coração em pixel art desenhado por recorte (sem emoji nem fonte). */
+.heart {
+  display: block;
+  width: 0.85em;
+  height: 0.75em;
+  background: var(--yellow);
+  clip-path: polygon(0% 14%, 14% 0%, 36% 0%, 50% 18%, 64% 0%, 86% 0%, 100% 14%, 100% 44%, 50% 100%, 0% 44%);
+}
+
+/* Moldura do labirinto: ocupa a altura que sobra; o canvas é centralizado e não altera o tamanho dela. */
+
+#frame {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.bezel {
+  position: relative;
+  padding: clamp(5px, 1.1vmin, 12px);
+  border: 1px solid rgba(120, 160, 255, 0.45);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(31, 79, 216, 0.28), rgba(6, 10, 30, 0.9) 55%);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 0 34px rgba(31, 79, 216, 0.4),
+    0 0 90px rgba(18, 180, 87, 0.12),
+    inset 0 0 24px rgba(90, 141, 255, 0.14);
+  line-height: 0;
+}
+
+#game {
+  display: block;
+  border-radius: 14px;
+  background: #040616;
+  touch-action: none;
+}
+
+/* Telas sobre o labirinto, com véu de vidro. */
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Unidades cq* valem para os filhos; a própria tela usa % e vmin. */
+  gap: clamp(6px, 2.2vmin, 18px);
+  padding: 6% 7%;
+  border-radius: 21px;
+  background: radial-gradient(90% 80% at 50% 40%, rgba(12, 22, 70, 0.74), var(--veil));
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  text-align: center;
+  line-height: 1.45;
+  container-type: size;
+  overflow: hidden;
+}
+
+.screen-title {
+  font-family: var(--pixel);
+  font-weight: 400;
+  font-size: clamp(12px, 6.4cqmin, 32px);
+  line-height: 1.35;
+  color: var(--yellow);
+  text-shadow:
+    0 0 18px rgba(255, 223, 0, 0.35),
+    0.07em 0.07em 0 rgba(18, 180, 87, 0.8);
+  text-wrap: balance;
+}
+
+.screen-text {
+  max-width: 32em;
+  font-size: clamp(10px, 3.9cqmin, 16px);
+  color: #f1f3ff;
+  text-wrap: balance;
+}
+
+.screen-hint {
+  font-size: clamp(8px, 2.9cqmin, 12px);
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+}
+
+.plane {
+  display: block;
+  width: min(150px, 34cqmin);
+  max-width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 16px rgba(90, 141, 255, 0.3));
+}
+
+/* Fileira de personagens na tela inicial (útil no celular, onde o painel lateral some). */
+.roster {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(4px, 1.6cqmin, 10px);
+}
+
+.roster-icon {
+  display: block;
+  width: clamp(26px, 8.6cqmin, 44px);
+  height: clamp(26px, 8.6cqmin, 44px);
+}
+
+.banner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* Fica logo abaixo da casa das ameaças, onde o clássico mostra "READY!". */
+  top: 56.45%;
+  transform: translateY(-50%);
+  font-family: var(--pixel);
+  font-size: clamp(10px, 2.4vmin, 20px);
+  line-height: 1;
+  text-align: center;
+  color: var(--yellow);
+  text-shadow:
+    0.12em 0.12em 0 #000,
+    0 0 0.6em rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+/* Botões */
+
+button {
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9em;
+  margin-top: clamp(2px, 1.5cqmin, 10px);
+  padding: 1.1em 1.6em;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fff27a, var(--yellow) 55%, var(--yellow-deep));
+  color: #0b1236;
+  font-family: var(--pixel);
+  font-size: clamp(9px, 3.3cqmin, 14px);
+  line-height: 1;
+  box-shadow:
+    0 0.4em 0 #9c7400,
+    0 10px 28px rgba(255, 223, 0, 0.3);
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease,
+    filter 120ms ease;
+}
+
+/* Seta em CSS: a fonte pixel não tem o caractere da seta. */
+.btn-primary::after {
+  content: '';
+  width: 0.62em;
+  height: 0.62em;
+  border-top: 0.2em solid currentColor;
+  border-right: 0.2em solid currentColor;
+  transform: rotate(45deg);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.06);
+}
+
+.btn-primary:active {
+  transform: translateY(0.3em);
+  box-shadow:
+    0 0.1em 0 #9c7400,
+    0 6px 18px rgba(255, 223, 0, 0.25);
+}
+
+.controls {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(6px, 2vw, 12px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: clamp(7px, calc(var(--vh) * 1.4), 12px) clamp(10px, 2.6vw, 16px);
+  border-radius: 12px;
+  color: var(--ink);
+  font-size: clamp(10px, calc(var(--vh) * 1.7), 14px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
+}
+
+/* Ícones dos botões: máscara SVG pintada com a cor do texto (sem emoji nem glifo). */
+.btn::before {
+  content: '';
+  flex: none;
+  width: 0.9em;
+  height: 0.9em;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+#btn-pause {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M1 0h2v8H1zM5 0h2v8H5z'/%3E%3C/svg%3E");
+}
+
+#btn-sound {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M5 0h3v2H6v6H2V5h3z'/%3E%3C/svg%3E");
+}
+
+#btn-restart {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13 8a5 5 0 1 1-1.6-3.7' fill='none' stroke='black' stroke-width='2.4'/%3E%3Cpath d='M14 1v6H8z'/%3E%3C/svg%3E");
+}
+
+.btn:not(:disabled):hover {
+  border-color: rgba(61, 220, 132, 0.7);
+  background: linear-gradient(180deg, rgba(61, 220, 132, 0.2), rgba(61, 220, 132, 0.06));
+}
+
+/* Painel lateral: só aparece em telas largas. */
+
+.side {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  overflow: hidden;
+  padding: 16px;
+  border-radius: 18px;
+}
+
+.level {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 223, 0, 0.14);
+  border: 1px solid rgba(255, 223, 0, 0.45);
+  font-family: var(--pixel);
+  font-size: 10px;
+  color: var(--yellow);
+}
+
+.side-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--ink-dim);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.legend li {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ink-dim);
+}
+
+.legend strong {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+
+.legend-icon {
+  display: block;
+  width: 44px;
+  height: 44px;
+}
+
+.fact {
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* Rodapé */
+
+.footer {
+  flex: none;
+  text-align: center;
+  font-size: clamp(8px, calc(var(--vh) * 1.35), 11px);
+  line-height: 1.5;
+  color: var(--ink-dim);
+}
+
+.footer-strong {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--green-neon);
+}
+
+/* Telas largas: placar e botões à esquerda, campo no centro e painel de personagens à direita. */
+@media (min-width: 1000px) and (min-height: 560px) {
+  #app {
+    display: grid;
+    grid-template-columns: minmax(230px, 290px) minmax(0, 1fr) minmax(260px, 340px);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'mast frame side'
+      'hud  frame side'
+      'ctrl frame side'
+      'foot foot  foot';
+    align-items: start;
+    justify-items: stretch;
+    column-gap: clamp(16px, 2vw, 32px);
+    row-gap: clamp(10px, calc(var(--vh) * 2), 22px);
+    max-width: 1640px;
+  }
+
+  .masthead {
+    grid-area: mast;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .title {
+    /* 8 caracteres da fonte pixel precisam caber na coluna de 230 a 290 px. */
+    font-size: clamp(18px, 2.3vw, 34px);
+  }
+
+  .subtitle {
+    justify-content: flex-start;
+  }
+
+  .hud {
+    grid-area: hud;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+    gap: 10px;
+  }
+
+  .card {
+    padding: 14px 6px;
+    gap: 10px;
+  }
+
+  .card-label {
+    font-size: 10px;
+  }
+
+  .card-value {
+    font-size: clamp(11px, 1.15vw, 16px);
+  }
+
+  #frame {
+    grid-area: frame;
+    align-self: stretch;
+  }
+
+  .controls {
+    grid-area: ctrl;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .btn {
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .side {
+    grid-area: side;
+    display: flex;
+    align-self: stretch;
+  }
+
+  .footer {
+    grid-area: foot;
+    font-size: 11px;
+  }
+}
+
+/* Telas muito baixas: a linha de apoio do cabeçalho cede espaço ao labirinto. */
+@media (max-height: 560px) {
+  .kicker {
+    display: none;
+  }
+}
+
+/* Tela sobre o labirinto baixa demais (celular deitado): título e botão sempre
+   cabem; o texto de apoio, a fileira de personagens e a dica de controles saem. */
+@container (max-height: 300px) {
+  .screen-text,
+  .screen-hint,
+  .roster {
+    display: none;
+  }
+}
+
+/* Celular deitado: subtítulo, linha de apoio e rodapé cedem altura ao labirinto. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .kicker,
+  .subtitle,
+  .footer {
+    display: none;
+  }
+}
+
+/* Recorta sem cortar o brilho da moldura; sem suporte, fica o hidden acima.
+   Em @supports para o minificador não descartar o fallback. */
+@supports (overflow: clip) {
+  #frame {
+    overflow: clip;
+    overflow-clip-margin: 100px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary,
+  .btn {
+    transition: none;
+  }
+}
