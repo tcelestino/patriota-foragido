@@ -61,3 +61,10 @@ Press Start 2P (licença OFL), empacotada no build via `@fontsource/press-start-
 - Sem cortes (cutscenes) entre fases
 - Sem cornering do fugitivo
 - Sem contador global de liberação dos agentes após a morte
+
+## CI/CD
+
+- `CI` (`.github/workflows/ci.yml`): roda testes (`npm test`) e typecheck + build (`npm run build`) em todo pull request.
+- `Deploy` (`.github/workflows/deploy.yml`): a cada push na `main`, roda o CI e publica no Cloudflare Workers (assets estáticos) em `patriota-foragido.tcelestino.dev.br`.
+- Secrets necessários no GitHub: `CLOUDFLARE_API_TOKEN` (permissão "Edit Cloudflare Workers") e `CLOUDFLARE_ACCOUNT_ID`.
+- Deploy manual: `npm run build && npx wrangler deploy`.
