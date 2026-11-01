@@ -1,4 +1,4 @@
-# Patriota Foragido: Fugindo em Busca de Atenção
+# Patriota Foragido: Adeus pátria e família.
 
 Patriota Foragido é uma sátira em pixel art para navegador (TypeScript, Vite e Vitest), na mecânica clássica de labirinto. Você controla um fugitivo que coleta passagens e escapa de quatro agentes. Os personagens são inventados e não representam pessoas, investigações ou fatos reais.
 
