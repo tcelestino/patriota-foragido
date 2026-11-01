@@ -57,7 +57,7 @@ describe('ui', () => {
       'UM ARCADE DE SÁTIRA',
       'PATRIOTA',
       'FORAGIDO',
-      'FUGINDO EM BUSCA DE ATENÇÃO',
+      'ADEUS PÁTRIA E FAMÍLIA.',
       'PONTOS',
       'VIDAS',
       'PASSAGENS',
